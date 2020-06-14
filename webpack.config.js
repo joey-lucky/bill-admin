@@ -1,1 +1,1 @@
-module.exports = require("./node_modules/hjoey-react-scripts/config/webpack.config");
+module.exports = require("./config/webpack.config.dev");
