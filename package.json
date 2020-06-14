@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "hjoey-react-scripts start",
-    "build": "webpack --config config/webpack.config.prod.js",
+    "build": "hjoey-react-scripts build",
     "profile": "webpack --config config/webpack.config.prod.js --profile --json > stats.js ",
     "eslint": "eslint --quiet -f visualstudio --fix src/"
   },
