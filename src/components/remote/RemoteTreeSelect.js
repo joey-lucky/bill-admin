@@ -11,7 +11,6 @@ function renderTreeNode(data = []) {
             key={"TreeNodeKey_"+item.id}
             value={item.id}
             title={item.name}
-            isLeaf={!item.children || item.children.length === 0 || true}
         >
             {item.children && item.children.length > 0 && renderTreeNode(item.children)}
         </TreeNode>

@@ -1,7 +1,7 @@
 import React from "react";
 import {observer} from "mobx-react";
 import {Col, Form, Input, Row,DatePicker} from "antd";
-import {FormDialog, RemoteSelect} from "@components";
+import {FormDialog, RemoteSelect, RemoteTreeSelect} from "@components";
 import {billTypeAPI, cardAPI, userAPI} from "@services";
 import moment from "moment";
 
@@ -64,7 +64,7 @@ export default class EditDialog extends FormDialog {
                             label="账单类型"
                             name={"billTypeId"}
                         >
-                            <RemoteSelect loadData={billTypeAPI.index}/>
+                            <RemoteTreeSelect loadData={billTypeAPI.index}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
