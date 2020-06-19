@@ -31,6 +31,11 @@ const route = {
             name: "账单类型",
         },
         {
+            path: "/BillType",
+            component: BillType,
+            name: "基金管理",
+        },
+        {
             path: "/BillTemplate",
             component: BillTemplate,
             name: "账单模板",
