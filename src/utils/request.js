@@ -49,6 +49,11 @@ function getHeaders() {
         "Authorization": "Bearer " + getToken()
     };
 }
+const requestConfig = {
+    errorHandler: (status) => {
+
+    }
+};
 
 export function getToken() {
     return getItem(getPublicPath() + "_token");
@@ -79,9 +84,20 @@ async function commonFetch(url, params = {}, method) {
             let message = data.message || "";
             throw new Error(message);
         }
-    } catch (e) {
-        errorHandler(e);
-        throw e;
+    } catch (error) {
+        const {data, response} = error;
+        if (response && response.status) {
+            const errorText = response.status + " " + (data.message || "");
+            notification.error({
+                message:errorText,
+            });
+            requestConfig.errorHandler && requestConfig.errorHandler(response.status);
+        } else if (!response) {
+            notification.error({
+                message:error.message || '您的网络发生异常，无法连接服务器',
+            });
+        }
+        throw error;
     }
 }
 

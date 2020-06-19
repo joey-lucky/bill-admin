@@ -18,7 +18,6 @@ initConfig({
 });
 
 const history = createBrowserHistory({basename: getPublicPath()});
-
 @observer
 class App extends React.Component {
     render() {

@@ -10,7 +10,7 @@
 .contentContainer {
     height: 0;
     width: 100%;
-    flex-grow: 1;
+    flex: 1;
     display: block;
     flex-shrink: 0;
 }
