@@ -1,25 +1,18 @@
 import React from "react";
 import {observer} from "mobx-react";
 import {Col, Form, Input, Row} from "antd";
-import {FormDialog, RemoteSelect} from "@components";
-import {cardAPI, cardTypeAPI, userAPI} from "@services";
+import {FormDialog, RemoteSelect, RemoteTreeSelect} from "@components";
+import {fundBussTypeAPI, fundTypeAPI} from "@services/invest";
 
 @observer
 export default class EditDialog extends FormDialog {
     static propTypes = FormDialog.propTypes;
 
     static defaultProps = {
-        width: 650,
+        width: 800,
         labelCol: {span: 6},
         wrapperCol: {span: 18}
     };
-
-    beforeSubmit(values){
-        if (!values.balance) {
-            values.balance = 0;
-        }
-        return values;
-    }
 
     renderForm() {
         return (
@@ -31,31 +24,42 @@ export default class EditDialog extends FormDialog {
                             name={"name"}
                             rules={[{required: true}]}
                         >
-                            <Input />
+                            <Input/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
                         <Form.Item
-                            label="用户"
-                            name={"userId"}
+                            label="排序"
+                            name={"sort"}
                             rules={[{required: true}]}
                         >
-                            <RemoteSelect loadData={userAPI.index}/>
+                            <Input type={"number"}/>
                         </Form.Item>
                     </Col>
-
                 </Row>
                 <Row>
                     <Col span={12}>
                         <Form.Item
                             label="类型"
-                            name={"cardTypeId"}
-                            rules={[{required: true}]}
+                            name={"fundTypeId"}
                         >
-                            <RemoteSelect loadData={cardTypeAPI.index}/>
+                            <RemoteSelect
+                                loadData={fundTypeAPI.index}
+                                allowClear={true}
+                            />
                         </Form.Item>
                     </Col>
-
+                    <Col span={12}>
+                        <Form.Item
+                            label="父级"
+                            name={"parentId"}
+                        >
+                            <RemoteTreeSelect
+                                loadData={fundBussTypeAPI.index}
+                                allowClear={true}
+                            />
+                        </Form.Item>
+                    </Col>
                 </Row>
             </React.Fragment>
         );

@@ -1,15 +1,16 @@
 import * as React from "react";
-import {Divider, Popconfirm} from "antd";
-import store from "./store";
-import {RemoteTable} from "@components";
-import {cardAPI} from "@services";
+import {Button, Col, Divider, Input, Popconfirm, Row, Table, Tabs} from "antd";
+import {Store} from "./store";
+import {fundBussTypeAPI} from "@services";
 import EditDialog from "./EditDialog";
 import {observer} from "mobx-react";
+import {SearchOutlined,ExpandOutlined} from "@ant-design/icons";
 import {toJS} from "mobx";
-import Filter from "./Filter";
+
+const store = new Store();
 
 @observer
-export default class Fund extends React.Component {
+export default class FundType extends React.Component {
     _columns = [
         {
             title: "名称",
@@ -17,19 +18,9 @@ export default class Fund extends React.Component {
             key: "name"
         },
         {
-            title: "类型",
-            dataIndex: "cardTypeName",
-            key: "cardTypeName"
-        },
-        {
-            title: "余额",
-            dataIndex: "balance",
-            key: "balance"
-        },
-        {
-            title: "用户",
-            dataIndex: "userName",
-            key: "userName"
+            title: "排序",
+            dataIndex: "sort",
+            key: "sort"
         },
         {
             title: "操作",
@@ -37,6 +28,8 @@ export default class Fund extends React.Component {
             render: (text, record) => (
                 <div>
                     <a href="javascript:" onClick={this.onUpdateClick(record)}>编辑</a>
+                    <Divider type="vertical"/>
+                    <a href="javascript:" onClick={this.onCreateChildClick(record)}>添加子项</a>
                     <Divider type="vertical"/>
                     <Popconfirm
                         title="确定要删除吗？" onConfirm={this.onDeleteClick(record)} okText="确定"
@@ -52,55 +45,67 @@ export default class Fund extends React.Component {
     _createRef = React.createRef();
 
     componentDidMount() {
+        store.loadData();
     }
 
     onDeleteClick = (record) => () => {
-        store.deleteData(record);
+        store.asyncDeleteData(record);
     };
 
     onUpdateClick = (record) => () => {
         this._updateRef.current.show(record);
     };
 
-    onSearch = (values) => {
-        store.changeQueryParams(values);
+    onCreateChildClick = (record) => () => {
+        this._createRef.current.show({parentId:record.id});
+    };
+
+    onSearch = (value) => {
+        store.keyword = value;
+        store.loadData();
     };
 
     onCreateClick = () => {
         this._createRef.current.show({});
     };
 
-    onCreateOrUpdateSuccess = () => {
+    onCreateOrUpdateSuccess = ()=>{
         store.loadData();
-    };
+    }
 
     render() {
         return (
             <div className={"fill-parent"}>
                 <EditDialog
                     ref={this._createRef}
-                    title={"新增银行卡"}
-                    loadData={cardAPI.create}
+                    title={"新增用户"}
+                    loadData={fundBussTypeAPI.create}
                     onFinish={this.onCreateOrUpdateSuccess}
-                    successMessage={"新增成功"}
                 />
                 <EditDialog
                     ref={this._updateRef}
-                    title={"编辑银行卡"}
-                    loadData={cardAPI.update}
+                    title={"新增用户"}
+                    loadData={fundBussTypeAPI.update}
                     onFinish={this.onCreateOrUpdateSuccess}
-                    successMessage={"编辑成功"}
                 />
-                <Filter
-                    onFinish={this.onSearch}
-                    onCreateClick={this.onCreateClick}
-                />
-                <RemoteTable
-                    lastModifyDate={store.lastModifyDate}
-                    loadData={cardAPI.index}
+                <Row style={{padding: 12}} gutter={12}>
+                    <Col span={6}>
+                        <Input.Search
+                            onSearch={this.onSearch}
+                            enterButton={<SearchOutlined/>}
+                        />
+                    </Col>
+                    <Col span={4}>
+                        <Button
+                            type={"primary"}
+                            onClick={this.onCreateClick}
+                        >新增</Button>
+                    </Col>
+                </Row>
+                <Table
+                    rowKey={(record) => record.id || ""}
                     columns={this._columns}
-                    pagination={{pageSize:10}}
-                    params={toJS(store.queryParams)}
+                    dataSource={toJS(store.data)}
                 />
             </div>
         );
