@@ -1,16 +1,19 @@
 import * as React from "react";
-import {Button, Col, Divider, Input, Popconfirm, Row, Table, Tabs} from "antd";
+import {Button, Col, Divider, Input, Popconfirm, Row, Table} from "antd";
 import {Store} from "./store";
-import {fundBussTypeAPI} from "@services";
+import {fundAPI} from "@services";
 import EditDialog from "./EditDialog";
 import {observer} from "mobx-react";
-import {SearchOutlined,ExpandOutlined} from "@ant-design/icons";
+import {SearchOutlined} from "@ant-design/icons";
 import {toJS} from "mobx";
+import FundBreadcrumb from "../FundBreadcrumb";
+import RouteUtils from "@utils/RouteUtils";
+import {RemoteTable} from "@components/index";
 
 const store = new Store();
 
 @observer
-export default class FundType extends React.Component {
+export default class FundSetting extends React.Component {
     _columns = [
         {
             title: "名称",
@@ -18,14 +21,19 @@ export default class FundType extends React.Component {
             key: "name"
         },
         {
+            title: "代码",
+            dataIndex: "code",
+            key: "code"
+        },
+        {
             title: "类型",
             dataIndex: "fundTypeName",
             key: "fundTypeName"
         },
         {
-            title: "排序",
-            dataIndex: "sort",
-            key: "sort"
+            title: "业务分类",
+            dataIndex: "fundBussTypeName",
+            key: "fundBussTypeName"
         },
         {
             title: "操作",
@@ -34,7 +42,9 @@ export default class FundType extends React.Component {
                 <div>
                     <a href="javascript:" onClick={this.onUpdateClick(record)}>编辑</a>
                     <Divider type="vertical"/>
-                    <a href="javascript:" onClick={this.onCreateChildClick(record)}>添加子项</a>
+                    <a href="javascript:" onClick={this.onBuySettingClick(record)}>买入配置</a>
+                    <Divider type="vertical"/>
+                    <a href="javascript:" onClick={this.onSellSettingClick(record)}>卖出配置</a>
                     <Divider type="vertical"/>
                     <Popconfirm
                         title="确定要删除吗？" onConfirm={this.onDeleteClick(record)} okText="确定"
@@ -53,16 +63,32 @@ export default class FundType extends React.Component {
         store.loadData();
     }
 
+    onSellSettingClick = (record) => () => {
+        const path = this.props.match.path;
+        const url = path + "/sell-setting";
+        const params = {
+            fundId:record.id,
+            fundName:record.name,
+        };
+        this.props.history.push(RouteUtils.toGetUrl(url, params));
+    };
+
+    onBuySettingClick = (record) => () => {
+        const path = this.props.match.path;
+        const url = path + "/buy-setting";
+        const params = {
+            fundId:record.id,
+            fundName:record.name,
+        };
+        this.props.history.push(RouteUtils.toGetUrl(url, params));
+    };
+
     onDeleteClick = (record) => () => {
         store.asyncDeleteData(record);
     };
 
     onUpdateClick = (record) => () => {
         this._updateRef.current.show(record);
-    };
-
-    onCreateChildClick = (record) => () => {
-        this._createRef.current.show({parentId:record.id});
     };
 
     onSearch = (value) => {
@@ -74,23 +100,24 @@ export default class FundType extends React.Component {
         this._createRef.current.show({});
     };
 
-    onCreateOrUpdateSuccess = ()=>{
+    onCreateOrUpdateSuccess = () => {
         store.loadData();
     }
 
     render() {
         return (
             <div className={"fill-parent"}>
+                <FundBreadcrumb/>
                 <EditDialog
                     ref={this._createRef}
                     title={"新增用户"}
-                    loadData={fundBussTypeAPI.create}
+                    loadData={fundAPI.create}
                     onFinish={this.onCreateOrUpdateSuccess}
                 />
                 <EditDialog
                     ref={this._updateRef}
                     title={"新增用户"}
-                    loadData={fundBussTypeAPI.update}
+                    loadData={fundAPI.update}
                     onFinish={this.onCreateOrUpdateSuccess}
                 />
                 <Row style={{padding: 12}} gutter={12}>
@@ -107,12 +134,14 @@ export default class FundType extends React.Component {
                         >新增</Button>
                     </Col>
                 </Row>
-                <Table
-                    rowKey={(record) => record.id || ""}
+                <RemoteTable
+                    loadData={fundAPI.index}
                     columns={this._columns}
-                    dataSource={toJS(store.data)}
+                    params={store.queryParams}
+                    lastModifyDate={store.lastModifyDate}
                 />
             </div>
         );
     }
+
 }

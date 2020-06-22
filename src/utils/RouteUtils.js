@@ -44,4 +44,12 @@ export default class RouteUtils {
         return result;
     }
 
+    static toGetUrl(url="", params={}) {
+        let paramStr = "";
+        Object.keys(params).forEach(key => {
+            let value = params[key] || "";
+            paramStr += `&${key}=${value}`;
+        });
+        return url + (paramStr.replace("&", "?"));
+    }
 }

@@ -21,6 +21,7 @@ export default class CommonLayout extends React.Component {
                 </Sider>
                 <Content className="fill-space-h">
                     <Spin
+                        className={"fill-parent"}
                         wrapperClassName="fill-parent"
                         size="large"
                         spinning={waitDialogStore.visible}

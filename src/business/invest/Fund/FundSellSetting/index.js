@@ -1,31 +1,29 @@
 import * as React from "react";
-import {Button, Col, Divider, Input, Popconfirm, Row, Table, Tabs} from "antd";
+import {Button, Col, Divider, Input, Popconfirm, Row, Table} from "antd";
 import {Store} from "./store";
-import {fundBussTypeAPI} from "@services";
+import {fundSellCommissionAPI} from "@services";
 import EditDialog from "./EditDialog";
 import {observer} from "mobx-react";
-import {SearchOutlined,ExpandOutlined} from "@ant-design/icons";
+import {SearchOutlined} from "@ant-design/icons";
 import {toJS} from "mobx";
+import FundBreadcrumb from "@business/invest/Fund/FundBreadcrumb";
+import RouteUtils from "@utils/RouteUtils";
 
 const store = new Store();
 
 @observer
-export default class FundType extends React.Component {
+export default class FundSellSetting extends React.Component {
     _columns = [
         {
-            title: "名称",
-            dataIndex: "name",
-            key: "name"
+            title: "持有时间小于（天）",
+            dataIndex: "lessThanDay",
+            key: "lessThanDay"
         },
         {
-            title: "类型",
-            dataIndex: "fundTypeName",
-            key: "fundTypeName"
-        },
-        {
-            title: "排序",
-            dataIndex: "sort",
-            key: "sort"
+            title: "手续费",
+            dataIndex: "commission",
+            key: "commission",
+            render: (text) => (text * 100).toFixed(2) + "%"
         },
         {
             title: "操作",
@@ -33,8 +31,6 @@ export default class FundType extends React.Component {
             render: (text, record) => (
                 <div>
                     <a href="javascript:" onClick={this.onUpdateClick(record)}>编辑</a>
-                    <Divider type="vertical"/>
-                    <a href="javascript:" onClick={this.onCreateChildClick(record)}>添加子项</a>
                     <Divider type="vertical"/>
                     <Popconfirm
                         title="确定要删除吗？" onConfirm={this.onDeleteClick(record)} okText="确定"
@@ -49,6 +45,13 @@ export default class FundType extends React.Component {
     _updateRef = React.createRef();
     _createRef = React.createRef();
 
+    constructor(props, context) {
+        super(props, context);
+        const {fundId, fundName} = RouteUtils.getQueryObject(props.location);
+        store.fundId = fundId;
+        store.fundName = fundName;
+    }
+
     componentDidMount() {
         store.loadData();
     }
@@ -61,36 +64,36 @@ export default class FundType extends React.Component {
         this._updateRef.current.show(record);
     };
 
-    onCreateChildClick = (record) => () => {
-        this._createRef.current.show({parentId:record.id});
-    };
-
     onSearch = (value) => {
         store.keyword = value;
         store.loadData();
     };
 
     onCreateClick = () => {
-        this._createRef.current.show({});
+        this._createRef.current.show({fundId: store.fundId});
     };
 
-    onCreateOrUpdateSuccess = ()=>{
+    onCreateOrUpdateSuccess = () => {
         store.loadData();
     }
 
     render() {
         return (
             <div className={"fill-parent"}>
+                <FundBreadcrumb
+                    name={`卖出手续费配置(${store.fundName})`}
+                    onSettingClick={() => this.props.history.goBack()}
+                />
                 <EditDialog
                     ref={this._createRef}
                     title={"新增用户"}
-                    loadData={fundBussTypeAPI.create}
+                    loadData={fundSellCommissionAPI.create}
                     onFinish={this.onCreateOrUpdateSuccess}
                 />
                 <EditDialog
                     ref={this._updateRef}
                     title={"新增用户"}
-                    loadData={fundBussTypeAPI.update}
+                    loadData={fundSellCommissionAPI.update}
                     onFinish={this.onCreateOrUpdateSuccess}
                 />
                 <Row style={{padding: 12}} gutter={12}>
