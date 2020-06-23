@@ -1,23 +1,20 @@
 import {action, observable} from "mobx";
 import {deleteAllEmptyChildren} from "@utils/treeDataUtils";
-import {fundSellCommissionAPI} from "@services/invest";
+import {fundDealAPI} from "@services/invest";
 
 export class Store {
     @observable data = [];
     @observable keyword = "";
-    @observable fundId = "";
-    @observable fundName = "";
 
     get queryParams() {
         return {
-            "keyword": this.keyword,
-            fundId:this.fundId,
+            "keyword": this.keyword
         };
     }
 
     @action
     loadData() {
-        fundSellCommissionAPI.index(this.queryParams).then((d) => {
+        fundDealAPI.index(this.queryParams).then((d) => {
            let data  = d.data || [];
             deleteAllEmptyChildren(data)
             this.data = data;
@@ -26,7 +23,7 @@ export class Store {
 
     @action
     asyncDeleteData(record) {
-        fundSellCommissionAPI.destroy(record.id).then(() => {
+        fundDealAPI.destroy(record.id).then(() => {
             this.loadData();
         });
     }

@@ -12,3 +12,7 @@ export async function login(account, password) {
 export async function getPublicKey() {
     return request.index(getApiPath() + '/get-public-key', {});
 }
+
+export async function getUserInfo() {
+    return request.apiGet(getApiPath() + '/safe/get-user-info', {});
+}
