@@ -20,6 +20,8 @@ export default class EditDialog extends FormDialog {
     beforeShow(data = {}) {
         if (!data.applyBuyDate) {
             data.applyBuyDate = moment();
+        }else{
+            data.applyBuyDate = moment(data.applyBuyDate);
         }
         if (!data.userId) {
             data.userId = authStore.userId;

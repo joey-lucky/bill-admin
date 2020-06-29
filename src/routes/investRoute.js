@@ -3,6 +3,7 @@ import FundBussType from "@business/invest/FundBussType";
 import FundType from "@business/invest/FundType";
 import Fund from "@business/invest/Fund";
 import FundDeal from "@business/invest/FundDeal";
+import FundDealSell from "@business/invest/FundDealSell";
 
 const route = {
     path: "/invest",
@@ -28,6 +29,11 @@ const route = {
             path: "/fund-deal",
             component: FundDeal,
             name: "基金交易",
+        },
+        {
+            path: "/fund-deal-sell",
+            component: FundDealSell,
+            name: "基金卖出记录",
         },
     ]
 };

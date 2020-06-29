@@ -1,29 +1,27 @@
 import {action, observable} from "mobx";
-import {deleteAllEmptyChildren} from "@utils/treeDataUtils";
-import {fundDealAPI} from "@services/invest";
+import {fundDealSellAPI} from "@services/invest";
 
 export class Store {
     @observable data = [];
     @observable keyword = "";
+    @observable lastModifyDate = Date.now();
+    @observable defaultParams = {};
 
     get queryParams() {
         return {
+            ...this.defaultParams,
             "keyword": this.keyword
         };
     }
 
     @action
     loadData() {
-        fundDealAPI.index(this.queryParams).then((d) => {
-           let data  = d.data || [];
-            deleteAllEmptyChildren(data)
-            this.data = data;
-        });
+        this.lastModifyDate = Date.now();
     }
 
     @action
     asyncDeleteData(record) {
-        fundDealAPI.destroy(record.id).then(() => {
+        fundDealSellAPI.destroy(record.id).then(() => {
             this.loadData();
         });
     }
