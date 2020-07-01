@@ -19,11 +19,13 @@ function parseData(rows = [], parse = {}) {
     });
 }
 
-export function useRemoteFormState(props) {
-    const {loadData, parse, params = {}, extraOptions = [], value: propValue, defaultValue, ...restProps} = props;
+const defLoadData = () => Promise.resolve({data: []});
 
+export function useRemoteFormState(props) {
+    const {loadData = defLoadData, parse, params = {}, extraOptions = [], value: propValue, defaultValue, ...restProps} = props;
     const [data, setData] = useState(extraOptions || []);
     const [value, setValue] = useState(propValue || defaultValue);
+
 
     useEffect(() => {
         setValue(propValue);

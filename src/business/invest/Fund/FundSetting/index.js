@@ -139,6 +139,7 @@ export default class FundSetting extends React.Component {
                     columns={this._columns}
                     params={store.queryParams}
                     lastModifyDate={store.lastModifyDate}
+                    pagination={{pageSize:10}}
                 />
             </div>
         );

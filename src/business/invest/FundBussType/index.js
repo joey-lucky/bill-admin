@@ -18,24 +18,37 @@ export default class FundType extends React.Component {
             key: "name"
         },
         {
-            title: "类型",
-            dataIndex: "fundTypeName",
-            key: "fundTypeName"
-        },
-        {
             title: "排序",
             dataIndex: "sort",
             key: "sort"
+        },
+        {
+            title: "是否为子集",
+            dataIndex: "isLeaf",
+            key: "isLeaf",
+            render:(text)=>text ? "是" :"否"
         },
         {
             title: "操作",
             key: "action",
             render: (text, record) => (
                 <div>
+                    {
+                        record.isLeaf &&
+                        <React.Fragment>
+                            <a href="javascript:" onClick={this.onJoinFund(record)}>关联基金</a>
+                            <Divider type="vertical"/>
+                        </React.Fragment>
+                    }
                     <a href="javascript:" onClick={this.onUpdateClick(record)}>编辑</a>
                     <Divider type="vertical"/>
-                    <a href="javascript:" onClick={this.onCreateChildClick(record)}>添加子项</a>
-                    <Divider type="vertical"/>
+                    {
+                        !record.isLeaf &&
+                        <React.Fragment>
+                            <a href="javascript:" onClick={this.onCreateChildClick(record)}>添加子项</a>
+                            <Divider type="vertical"/>
+                        </React.Fragment>
+                    }
                     <Popconfirm
                         title="确定要删除吗？" onConfirm={this.onDeleteClick(record)} okText="确定"
                         cancelText="取消"
@@ -48,6 +61,7 @@ export default class FundType extends React.Component {
     ];
     _updateRef = React.createRef();
     _createRef = React.createRef();
+    _joinFund = React.createRef();
 
     componentDidMount() {
         store.loadData();
@@ -59,6 +73,10 @@ export default class FundType extends React.Component {
 
     onUpdateClick = (record) => () => {
         this._updateRef.current.show(record);
+    };
+
+    onJoinFund = (record) => () => {
+        this._joinFund.current.show(record);
     };
 
     onCreateChildClick = (record) => () => {

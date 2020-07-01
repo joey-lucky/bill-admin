@@ -2,7 +2,7 @@ import React from "react";
 import {observer} from "mobx-react";
 import {Col, Form, Input, Row} from "antd";
 import {FormDialog, RemoteSelect, RemoteTreeSelect} from "@components";
-import {fundBussTypeAPI, fundTypeAPI} from "@services/invest";
+import {fundBussTypeAPI} from "@services/invest";
 
 @observer
 export default class EditDialog extends FormDialog {
@@ -40,17 +40,6 @@ export default class EditDialog extends FormDialog {
                 <Row>
                     <Col span={12}>
                         <Form.Item
-                            label="类型"
-                            name={"fundTypeId"}
-                        >
-                            <RemoteSelect
-                                loadData={fundTypeAPI.index}
-                                allowClear={true}
-                            />
-                        </Form.Item>
-                    </Col>
-                    <Col span={12}>
-                        <Form.Item
                             label="父级"
                             name={"parentId"}
                         >
@@ -58,6 +47,18 @@ export default class EditDialog extends FormDialog {
                                 loadData={fundBussTypeAPI.index}
                                 allowClear={true}
                             />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item
+                            label="是否为子集"
+                            name={"isLeaf"}
+                            rules={[{required: true}]}
+                        >
+                            <RemoteSelect extraOptions={[
+                                {"id": false, name: "否"},
+                                {"id": true, name: "是"},
+                            ]}/>
                         </Form.Item>
                     </Col>
                 </Row>
