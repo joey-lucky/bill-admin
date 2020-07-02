@@ -13,7 +13,7 @@ export default class EditDialog extends FormDialog {
 
     static defaultProps = {
         width: 800,
-        labelCol: {span: 8},
+        labelCol: {span: 4},
         wrapperCol: {span: 16}
     };
 
@@ -38,16 +38,16 @@ export default class EditDialog extends FormDialog {
         return (
             <React.Fragment>
                 <Row>
-                    <Col span={12}>
+                    <Col span={24}>
                         <Form.Item
                             label="名称"
                             name={"fundId"}
                             rules={[{required: true}]}
                         >
-                            <RemoteSelect loadData={fundAPI.index}/>
+                            <RemoteSelect loadData={fundAPI.index} parse={(item)=>({id:item.id,name:item.name +" "+ item.code})}/>
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={24}>
                         <Form.Item
                             label="买入金额"
                             name={"buyMoney"}
@@ -56,9 +56,7 @@ export default class EditDialog extends FormDialog {
                             <Input type={"number"}/>
                         </Form.Item>
                     </Col>
-                </Row>
-                <Row>
-                    <Col span={12}>
+                    <Col span={24}>
                         <Form.Item
                             label="申请买入日期"
                             name={"applyBuyDate"}
@@ -67,7 +65,7 @@ export default class EditDialog extends FormDialog {
                             <DatePicker style={{width:"100%"}} format={"YYYY-MM-DD"}/>
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={24}>
                         <Form.Item
                             label="用户"
                             name={"userId"}
@@ -77,6 +75,7 @@ export default class EditDialog extends FormDialog {
                         </Form.Item>
                     </Col>
                 </Row>
+
             </React.Fragment>
         );
     }

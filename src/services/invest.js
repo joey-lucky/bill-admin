@@ -8,3 +8,4 @@ export const fundBuyCommissionAPI = new RestFullApi(getApiPath() + "/invest/fund
 export const fundSellCommissionAPI = new RestFullApi(getApiPath() + "/invest/fund-sell-commission");
 export const fundDealAPI = new RestFullApi(getApiPath() + "/invest/fund-deal");
 export const fundDealSellAPI = new RestFullApi(getApiPath() + "/invest/fund-deal-sell");
+export const fundPriceAPI = new RestFullApi(getApiPath() + "/invest/fund-price");
