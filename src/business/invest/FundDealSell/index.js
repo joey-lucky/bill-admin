@@ -8,6 +8,7 @@ import {SearchOutlined} from "@ant-design/icons";
 import moment from "moment";
 import {RemoteTable} from "@components/index";
 import RouteUtils from "@utils/RouteUtils";
+import {toJS} from "mobx";
 
 const store = new Store();
 
@@ -96,7 +97,7 @@ export default class FundDealSell extends React.Component {
     };
 
     onCreateClick = () => {
-        this._createRef.current.show({});
+        this._createRef.current.show(toJS(store.defaultParams));
     };
 
     onCreateOrUpdateSuccess = () => {
@@ -135,7 +136,7 @@ export default class FundDealSell extends React.Component {
                 <RemoteTable
                     loadData={fundDealSellAPI.index}
                     columns={this._columns}
-                    params={store.lastModifyDate}
+                    params={store.queryParams}
                     lastModifyDate={store.lastModifyDate}
                 />
             </div>

@@ -5,6 +5,7 @@ import {FormDialog, RemoteSelect} from "@components";
 import {fundDealAPI} from "@services/invest";
 import moment from "moment";
 import {authStore} from "@stores";
+import Assert from "@utils/Assert";
 
 @observer
 export default class EditDialog extends FormDialog {
@@ -12,14 +13,16 @@ export default class EditDialog extends FormDialog {
 
     static defaultProps = {
         width: 800,
-        labelCol: {span: 8},
+        labelCol: {span: 6},
         wrapperCol: {span: 16}
     };
+
+    dealMap = {};
 
     beforeShow(data = {}) {
         if (!data.applySellDate) {
             data.applySellDate = moment();
-        }else {
+        } else {
             data.applySellDate = moment(data.applySellDate);
         }
         if (!data.userId) {
@@ -28,8 +31,19 @@ export default class EditDialog extends FormDialog {
         return data;
     }
 
+    afterShow(data = {}) {
+        this.dealMap = {};
+        fundDealAPI.index({status: "0"}).then((d) => {
+            d.data.forEach((item)=>{
+                this.dealMap[item.id] = item;
+            })
+        });
+    }
+
     beforeSubmit(values) {
         values.applySellDate = values.applySellDate.format("YYYY-MM-DD 00:00:00");
+        let remainCount = this.dealMap[values.fundDealId].remainCount;
+        Assert.isTrue(values.sellCount <= remainCount, "数量超过限制")
         return values;
     }
 
@@ -37,7 +51,7 @@ export default class EditDialog extends FormDialog {
         return (
             <React.Fragment>
                 <Row>
-                    <Col span={12}>
+                    <Col span={24}>
                         <Form.Item
                             label="基金名称"
                             name={"fundDealId"}
@@ -55,7 +69,7 @@ export default class EditDialog extends FormDialog {
                             />
                         </Form.Item>
                     </Col>
-                    <Col span={12}>
+                    <Col span={24}>
                         <Form.Item
                             label="卖出份额"
                             name={"sellCount"}
@@ -64,9 +78,7 @@ export default class EditDialog extends FormDialog {
                             <Input type={"number"}/>
                         </Form.Item>
                     </Col>
-                </Row>
-                <Row>
-                    <Col span={12}>
+                    <Col span={24}>
                         <Form.Item
                             label="申请卖出日期"
                             name={"applySellDate"}

@@ -15,9 +15,14 @@ const store = new Store();
 export default class FundDealList extends React.Component {
     _columns = [
         {
-            title: "名称",
+            title: "基金名称",
             dataIndex: "fundName",
             key: "fundName"
+        },
+        {
+            title: "基金代码",
+            dataIndex: "fundCode",
+            key: "fundCode"
         },
         {
             title: "申请买入日期",
