@@ -9,6 +9,7 @@ import {toJS} from "mobx";
 import FundBreadcrumb from "../FundBreadcrumb";
 import RouteUtils from "@utils/RouteUtils";
 import {RemoteTable} from "@components/index";
+import moment from "moment";
 
 const store = new Store();
 
@@ -34,6 +35,12 @@ export default class FundSetting extends React.Component {
             title: "业务分类",
             dataIndex: "fundBussTypeName",
             key: "fundBussTypeName"
+        },
+        {
+            title: "发行时间",
+            dataIndex: "startDate",
+            key: "startDate",
+            render: (text) => text && moment(text).format("YYYY-MM-DD") || "\\"
         },
         {
             title: "操作",

@@ -1,8 +1,9 @@
 import React from "react";
 import {observer} from "mobx-react";
-import {Col, Form, Input, Row} from "antd";
+import {Col, DatePicker, Form, Input, Row} from "antd";
 import {FormDialog, RemoteSelect, RemoteTreeSelect} from "@components";
 import {fundBussTypeAPI, fundTypeAPI} from "@services/invest";
+import moment from "moment";
 
 @observer
 export default class EditDialog extends FormDialog {
@@ -13,6 +14,20 @@ export default class EditDialog extends FormDialog {
         labelCol: {span: 6},
         wrapperCol: {span: 18}
     };
+
+    beforeSubmit(values) {
+        if (values.startDate) {
+            values.startDate = values.startDate.format("YYYY-MM-DD 00:00:00");
+        }
+        return values;
+    }
+
+    beforeShow(data = {}) {
+        if (data.startDate) {
+            data.startDate = moment(data.startDate);
+        }
+        return data;
+    }
 
     renderForm() {
         return (
@@ -42,7 +57,6 @@ export default class EditDialog extends FormDialog {
                         <Form.Item
                             label="类型"
                             name={"fundTypeId"}
-                            rules={[{required: true}]}
                         >
                             <RemoteSelect loadData={fundTypeAPI.index}/>
                         </Form.Item>
@@ -51,10 +65,22 @@ export default class EditDialog extends FormDialog {
                         <Form.Item
                             label="业务分类"
                             name={"fundBussTypeId"}
-                            rules={[{required: true}]}
                         >
                             <RemoteTreeSelect loadData={fundBussTypeAPI.index}/>
                         </Form.Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span={12}>
+                        <Form.Item
+                            label="类型"
+                            name={"startDate"}
+                        >
+                            <DatePicker format={"YYYY-MM-DD"}/>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+
                     </Col>
                 </Row>
             </React.Fragment>
