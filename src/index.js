@@ -10,6 +10,7 @@ import {getPublicPath, initConfig} from "@global";
 import {toJS} from "mobx";
 import routes from "./routes";
 import "./theme.less";
+import * as request from "@utils/request";
 
 initConfig({
     apiPath: "/bill/api",
@@ -18,6 +19,10 @@ initConfig({
 });
 
 const history = createBrowserHistory({basename: getPublicPath()});
+
+request.setErrorHandler(()=>{
+
+})
 @observer
 class App extends React.Component {
     render() {

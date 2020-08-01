@@ -11,3 +11,4 @@ export const dictDataAPI = new RestFullApi(getApiPath() + "/dict-data");
 export const billTemplateAPI = new RestFullApi(getApiPath() + "/bill-template");
 // data
 export const billAPI = new RestFullApi(getApiPath() + "/bill");
+billAPI.exportExcel = () => window.open(getApiPath() + "/bill/export-excel", "_blank");

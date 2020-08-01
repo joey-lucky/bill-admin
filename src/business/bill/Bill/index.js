@@ -87,6 +87,10 @@ export default class Bill extends React.Component {
         this._createRef.current.show({});
     };
 
+    onExportClick = () => {
+        billAPI.exportExcel();
+    };
+
     onCreateOrUpdateSuccess = async () => {
         await store.loadData();
     };
@@ -110,6 +114,7 @@ export default class Bill extends React.Component {
                 <Filter
                     onFinish={this.onSearch}
                     onCreateClick={this.onCreateClick}
+                    onExportClick={this.onExportClick}
                 />
                 <RemoteTable
                     lastModifyDate={lastModifyDate}

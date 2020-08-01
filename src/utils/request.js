@@ -49,11 +49,16 @@ function getHeaders() {
         "Authorization": "Bearer " + getToken()
     };
 }
+
 const requestConfig = {
     errorHandler: (status) => {
 
     }
 };
+
+export function setErrorHandler(h) {
+    requestConfig.errorHandler = h;
+}
 
 export function getToken() {
     return getItem(getPublicPath() + "_token");

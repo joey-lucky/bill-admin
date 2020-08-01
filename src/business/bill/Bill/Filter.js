@@ -11,7 +11,7 @@ const cardLoadData = (...args) => {
     });
 };
 
-export default function Filter({onFinish,onCreateClick}) {
+export default function Filter({onFinish,onCreateClick,onExportClick}) {
     return (
         <Form
             labelCol={{span: 6}}
@@ -62,6 +62,7 @@ export default function Filter({onFinish,onCreateClick}) {
                 <Space>
                     <Button type={"primary"} htmlType={"submit"}>查询</Button>
                     <Button type={"primary"} onClick={onCreateClick}>新增</Button>
+                    <Button type={"primary"} onClick={onExportClick}>导出</Button>
                 </Space>
             </Row>
             <Row style={{width: "100%",padding:"12px 0"}}>

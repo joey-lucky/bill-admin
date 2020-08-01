@@ -115,6 +115,10 @@ export default class FundDealList extends React.Component {
         this._createRef.current.show({});
     };
 
+    onExportClick = () => {
+        fundDealAPI.exportExcel();
+    };
+
     onCreateOrUpdateSuccess = () => {
         store.loadData();
     }
@@ -145,12 +149,17 @@ export default class FundDealList extends React.Component {
                             enterButton={<SearchOutlined/>}
                         />
                     </Col>
-                    <Col span={4}>
-                        <Button
-                            type={"primary"}
-                            onClick={this.onCreateClick}
-                        >新增</Button>
-                    </Col>
+
+                    <Button
+                        style={{margin:"0 12px"}}
+                        type={"primary"}
+                        onClick={this.onCreateClick}
+                    >新增</Button>
+                    <Button
+                        style={{margin:"0 12px"}}
+                        type={"primary"}
+                        onClick={this.onExportClick}
+                    >导出</Button>
                 </Row>
                 <RemoteTable
                     loadData={fundDealAPI.index}

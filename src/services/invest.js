@@ -1,5 +1,6 @@
 import {getApiPath} from "../global";
 import {RestFullApi} from "./rest-full-api";
+import {billAPI} from "@services/bill";
 
 export const fundTypeAPI = new RestFullApi(getApiPath() + "/invest/fund-type");
 export const fundAPI = new RestFullApi(getApiPath() + "/invest/fund");
@@ -9,3 +10,5 @@ export const fundSellCommissionAPI = new RestFullApi(getApiPath() + "/invest/fun
 export const fundDealAPI = new RestFullApi(getApiPath() + "/invest/fund-deal");
 export const fundDealSellAPI = new RestFullApi(getApiPath() + "/invest/fund-deal-sell");
 export const fundPriceAPI = new RestFullApi(getApiPath() + "/invest/fund-price");
+
+fundDealAPI.exportExcel = () => window.open(getApiPath() + "/invest/fund-deal/export-excel", "_blank");
